@@ -43,6 +43,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1036354920952-4h5vu726sf5vamcp9qrdkdivolnn4r0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuempresa.saludtotal.test",
+            "certificate_hash": "5220fddd66847d5580da402114112d53896b8e83"
+          }
+        },
+        {
           "client_id": "1036354920952-pnt0p1c50j8uputdljh8vitbabdrrg8n.apps.googleusercontent.com",
           "client_type": 3
         }
