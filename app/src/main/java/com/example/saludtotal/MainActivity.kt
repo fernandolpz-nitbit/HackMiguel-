@@ -1,6 +1,7 @@
 package com.tuempresa.saludtotal.test
 
 import android.os.Bundle
+import android.view.View // ✅ IMPORTACIÓN NECESARIA PARA 'View.GONE' Y 'View.VISIBLE'
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
@@ -21,23 +22,38 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        // ✅ Forma segura de obtener el NavController en una Activity
         val navController = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_activity_main)
             ?.findNavController()
             ?: throw IllegalStateException("NavController no encontrado")
 
+        // Ajustamos la configuración para que no incluya 'home' en la barra de acción principal,
+        // ya que esa pantalla no tendrá barra de título.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home,
                 R.id.navigation_dashboard,
                 R.id.navigation_notifications
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
 
-    // ¡Observa que aquí ya no hay ninguna función de login ni lógica de botones!
-    // Todo eso ahora vive felizmente dentro de HomeFragment.kt
+
+        // Este listener se encarga de mostrar u ocultar las barras de navegación
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                // Si estamos en la pantalla de login (HomeFragment)
+                R.id.navigation_home -> {
+                    binding.navView.visibility = View.GONE
+                    supportActionBar?.hide()
+                }
+                // Para todas las demás pantallas
+                else -> {
+                    binding.navView.visibility = View.VISIBLE
+                    supportActionBar?.show()
+                }
+            }
+        }
+
+    }
 }

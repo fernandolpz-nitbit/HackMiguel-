@@ -12,28 +12,29 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tuempresa.saludtotal.test.R
-import com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    // Usaremos ViewBinding de forma segura, pero necesitamos inicializarlo en onCreateView
+    // y limpiarlo en onDestroyView. No es necesario cambiar la declaración aquí.
+    private var _binding: com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     // Variables de Firebase
     private val auth by lazy { Firebase.auth }
     private val db by lazy { Firebase.firestore }
 
-    // ✅ Variables para Google Sign-In
+    // Variables para Google Sign-In
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
@@ -65,30 +66,46 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Lógica para Email y Contraseña (se mantiene)
+        // Lógica para Email y Contraseña (COMPLETADA)
         val emailInput = view.findViewById<EditText>(R.id.emailEditText)
         val passwordInput = view.findViewById<EditText>(R.id.passwordEditText)
         val registerBtn = view.findViewById<Button>(R.id.registerButton)
         val loginBtn = view.findViewById<Button>(R.id.loginButton)
 
-        registerBtn.setOnClickListener { /* ... (código anterior) */ }
-        loginBtn.setOnClickListener { /* ... (código anterior) */ }
+        registerBtn.setOnClickListener {
+            val email = emailInput.text.toString().trim()
+            val password = passwordInput.text.toString().trim()
+            if (email.isNotEmpty() && password.length >= 6) {
+                registerUser(email, password)
+            } else {
+                Toast.makeText(requireContext(), "Email o contraseña inválidos (mín. 6 caracteres).", Toast.LENGTH_LONG).show()
+            }
+        }
 
-        // ✅ Lógica para el botón de Google
+        loginBtn.setOnClickListener {
+            val email = emailInput.text.toString().trim()
+            val password = passwordInput.text.toString().trim()
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                signInUser(email, password)
+            } else {
+                Toast.makeText(requireContext(), "Por favor, completa todos los campos.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Lógica para el botón de Google
         val googleSignInButton = view.findViewById<Button>(R.id.googleSignInButton)
         googleSignInButton.setOnClickListener {
             googleSignInLauncher.launch(googleSignInClient.signInIntent)
         }
     }
 
-    // ✅ Nueva función para autenticar con Firebase usando el token de Google
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -97,7 +114,6 @@ class HomeFragment : Fragment() {
                     val user = auth.currentUser
                     Toast.makeText(requireContext(), "Login con Google exitoso.", Toast.LENGTH_SHORT).show()
 
-                    // Si es un usuario nuevo, crea su perfil en Firestore
                     if (task.result.additionalUserInfo?.isNewUser == true) {
                         val userId = user?.uid ?: "sin_id_valido"
                         val userProfile = hashMapOf(
@@ -109,15 +125,47 @@ class HomeFragment : Fragment() {
                         db.collection("users").document(userId).set(userProfile)
                             .addOnSuccessListener { println("Perfil de nuevo usuario de Google creado.") }
                     }
+                    findNavController().navigate(R.id.action_login_success_to_main_flow)
                 } else {
                     Toast.makeText(requireContext(), "Fallo de autenticación con Firebase.", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    // Funciones de registerUser y signInUser (se mantienen sin cambios)
-    private fun registerUser(email: String, pass: String) { /* ... (código anterior) */ }
-    private fun signInUser(email: String, pass: String) { /* ... (código anterior) */ }
+    private fun registerUser(email: String, pass: String) {
+        auth.createUserWithEmailAndPassword(email, pass)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(requireContext(), "Registro exitoso.", Toast.LENGTH_SHORT).show()
+                    val userId = auth.currentUser?.uid ?: "sin_id_valido"
+                    val userProfile = hashMapOf(
+                        "role" to "patient",
+                        "createdAt" to System.currentTimeMillis(),
+                        "email" to email
+                    )
+                    db.collection("users").document(userId).set(userProfile)
+                        .addOnSuccessListener {
+                            println("Perfil de usuario creado. Navegando...")
+                            findNavController().navigate(R.id.action_login_success_to_main_flow)
+                        }
+                        .addOnFailureListener { e -> println("Error al crear perfil: $e") }
+                } else {
+                    Toast.makeText(requireContext(), "Fallo al registrar: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+    }
+
+    private fun signInUser(email: String, pass: String) {
+        auth.signInWithEmailAndPassword(email, pass)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(requireContext(), "Inicio de sesión exitoso.", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_login_success_to_main_flow)
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
