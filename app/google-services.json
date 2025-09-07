@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1036354920952",
+    "project_id": "saludtotal-test",
+    "storage_bucket": "saludtotal-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036354920952:android:af1eebb83abb5a8bbab60d",
+        "android_client_info": {
+          "package_name": "com.tuempresa.saludtotal.test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAEIcbTr2feaPnd4cRJ5AcWhr-sS-uHVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
