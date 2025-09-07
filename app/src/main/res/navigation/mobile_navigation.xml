@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/action_login_success_to_main_flow"
-            app:destination="@id/navigation_dashboard"
+            app:destination="@id/navigation_trataments"
             app:popUpTo="@id/navigation_home"
             app:popUpToInclusive="true" />
         <action
@@ -23,24 +23,44 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.tuempresa.saludtotal.test.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_trataments"
+        android:name="com.tuempresa.saludtotal.test.ui.Trataments.TratamentsFragment"
+        android:label="TratamentsFragment"
+        tools:layout="@layout/fragment_trataments" />
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.tuempresa.saludtotal.test.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+
+
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.tuempresa.saludtotal.test.ui.register.RegisterFragment"
         android:label="RegisterFragment" >
         <action
-            android:id="@+id/action_registerFragment_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
+            android:id="@+id/action_registerFragment_to_navigation_trataments"
+            app:destination="@id/navigation_trataments" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.tuempresa.saludtotal.test.ui.Calendar.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" />
+    <fragment
+        android:id="@+id/doctorsFragment"
+        android:name="com.tuempresa.saludtotal.test.ui.Doctors.DoctorsFragment"
+        android:label="fragment_medic"
+        tools:layout="@layout/fragment_medic" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.tuempresa.saludtotal.test.ui.Profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.tuempresa.saludtotal.test.ui.Scan.ScanFragment"
+        android:label="fragment_scan"
+        tools:layout="@layout/fragment_scan" />
 
 
 </navigation>

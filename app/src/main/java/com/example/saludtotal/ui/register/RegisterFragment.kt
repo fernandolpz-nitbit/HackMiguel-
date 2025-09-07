@@ -77,7 +77,7 @@ class RegisterFragment : Fragment() {
                         .addOnSuccessListener {
                             println("Perfil de usuario creado. Navegando...")
                             // Navegar al flujo principal de la app
-                            findNavController().navigate(R.id.navigation_dashboard)
+                            findNavController().navigate(R.id.navigation_trataments)
                         }
                         .addOnFailureListener { e ->
                             Toast.makeText(requireContext(), "Error al crear perfil: ${e.message}", Toast.LENGTH_LONG).show()
