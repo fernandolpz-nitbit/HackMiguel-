@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         // Mostrar / ocultar toolbar y bottom nav según destino
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_home -> {
+                R.id.navigation_home, R.id.registerFragment -> {
                     binding.navView.visibility = View.GONE
                     supportActionBar?.hide()
                 }

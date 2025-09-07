@@ -25,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 import com.tuempresa.saludtotal.test.R
 import com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding
 
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -91,15 +92,9 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // El enlace de texto intenta REGISTRARSE
+
         registerLink.setOnClickListener {
-            val email = emailInput.text.toString().trim()
-            val password = passwordInput.text.toString().trim()
-            if (email.isNotEmpty() && password.length >= 6) {
-                registerUser(email, password)
-            } else {
-                Toast.makeText(requireContext(), "Para registrar, ingresa un email y una contraseña de al menos 6 caracteres.", Toast.LENGTH_LONG).show()
-            }
+            findNavController().navigate(R.id.action_navigation_home_to_registerFragment)
         }
 
         // El botón de Google se mantiene igual
