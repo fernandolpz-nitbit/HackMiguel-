@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1036354920952:android:af1eebb83abb5a8bbab60d",
+        "mobilesdk_app_id": "1:1036354920952:android:b3c6e74211813869bab60d",
         "android_client_info": {
-          "package_name": "com.tuempresa.saludtotal.test"
+          "package_name": "com.example.saludtotal"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1036354920952-pnt0p1c50j8uputdljh8vitbabdrrg8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCAEIcbTr2feaPnd4cRJ5AcWhr-sS-uHVA"
@@ -20,7 +25,41 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036354920952-pnt0p1c50j8uputdljh8vitbabdrrg8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036354920952:android:af1eebb83abb5a8bbab60d",
+        "android_client_info": {
+          "package_name": "com.tuempresa.saludtotal.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036354920952-pnt0p1c50j8uputdljh8vitbabdrrg8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAEIcbTr2feaPnd4cRJ5AcWhr-sS-uHVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036354920952-pnt0p1c50j8uputdljh8vitbabdrrg8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

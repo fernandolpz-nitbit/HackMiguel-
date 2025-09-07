@@ -37,5 +37,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
-}
 
+    // ¡Observa que aquí ya no hay ninguna función de login ni lógica de botones!
+    // Todo eso ahora vive felizmente dentro de HomeFragment.kt
+}

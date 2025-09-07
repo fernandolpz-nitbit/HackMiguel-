@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // Aplica el plugin de Google Services a este módulo
     alias(libs.plugins.google.services)
+
 }
 
 android {
@@ -67,4 +68,5 @@ dependencies {
     // Dependencia para la base de datos Cloud Firestore
     implementation(libs.firebase.firestore)
     // ------------------------------------------
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 }
