@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView // <-- Importación necesaria para el enlace de texto
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,12 +23,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.tuempresa.saludtotal.test.R
+import com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
-    // Usaremos ViewBinding de forma segura, pero necesitamos inicializarlo en onCreateView
-    // y limpiarlo en onDestroyView. No es necesario cambiar la declaración aquí.
-    private var _binding: com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     // Variables de Firebase
@@ -66,30 +66,22 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = com.tuempresa.saludtotal.test.databinding.FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Lógica para Email y Contraseña (COMPLETADA)
+        // ✅ LÓGICA FINAL SINCRONIZADA CON EL DISEÑO MODERNO
         val emailInput = view.findViewById<EditText>(R.id.emailEditText)
         val passwordInput = view.findViewById<EditText>(R.id.passwordEditText)
-        val registerBtn = view.findViewById<Button>(R.id.registerButton)
-        val loginBtn = view.findViewById<Button>(R.id.loginButton)
+        val continueButton = view.findViewById<Button>(R.id.loginButton) // El botón "Continuar" usa el ID 'loginButton'
+        val googleSignInButton = view.findViewById<Button>(R.id.googleSignInButton)
+        val registerLink = view.findViewById<TextView>(R.id.registerLinkTextView) // El enlace de texto
 
-        registerBtn.setOnClickListener {
-            val email = emailInput.text.toString().trim()
-            val password = passwordInput.text.toString().trim()
-            if (email.isNotEmpty() && password.length >= 6) {
-                registerUser(email, password)
-            } else {
-                Toast.makeText(requireContext(), "Email o contraseña inválidos (mín. 6 caracteres).", Toast.LENGTH_LONG).show()
-            }
-        }
-
-        loginBtn.setOnClickListener {
+        // El botón "Continuar" intenta INICIAR SESIÓN
+        continueButton.setOnClickListener {
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
             if (email.isNotEmpty() && password.isNotEmpty()) {
@@ -99,8 +91,18 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Lógica para el botón de Google
-        val googleSignInButton = view.findViewById<Button>(R.id.googleSignInButton)
+        // El enlace de texto intenta REGISTRARSE
+        registerLink.setOnClickListener {
+            val email = emailInput.text.toString().trim()
+            val password = passwordInput.text.toString().trim()
+            if (email.isNotEmpty() && password.length >= 6) {
+                registerUser(email, password)
+            } else {
+                Toast.makeText(requireContext(), "Para registrar, ingresa un email y una contraseña de al menos 6 caracteres.", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        // El botón de Google se mantiene igual
         googleSignInButton.setOnClickListener {
             googleSignInLauncher.launch(googleSignInClient.signInIntent)
         }
